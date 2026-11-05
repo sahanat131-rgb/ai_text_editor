@@ -5,3 +5,4 @@ mlruns/
 mlflow.db
 run_log*.txt
 data/
+.pytest_cache/
