@@ -1,0 +1,7 @@
+venv
+data
+mlruns
+mlflow.db
+_pycache_
+*.csv
+run_log*.txt
