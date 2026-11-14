@@ -37,7 +37,20 @@ docker build -t ai-text-detector .
 docker run -p 8000:8000 ai-text-detector
 
 
+## Model versions and results
+
+| Model | Training data | F1 on abstracts | F1 on tweets | Avg. confidence on tweets |
+|---|---|---|---|---|
+| v1 | 62 AI + 62 human tweets | 0.67 | 0.87 | 0.55 |
+| v2 | 22k scientific abstracts only | 0.94 | 0.00 | 0.87 |
+| **v3 (live)** | abstracts + tweets (tweets weighted x30) | 0.94 | 0.92 | 0.80 |
+
+- **Domain shift:** v2 scored 0.94 on its own test set but 0.0 F1 on tweets, with high confidence. A promotion gate (`train_v3.py`) only promotes a model that beats the current one on both datasets.
+- **Monitoring:** on a 6-text sample batch, the share of low-confidence (<0.6) predictions fell from 83% to 17% after v3.
+- Dataset: [Ateeqq/AI-and-Human-Generated-Text](https://huggingface.co/datasets/Ateeqq/AI-and-Human-Generated-Text) (MIT licence).
+
 ## Known limitations
-- Small dataset (62 AI samples, balanced with 62 human tweets), so confidence scores are low.
-- Human examples are airline tweets, so the model may misjudge text from other domains.
-- Next steps: more AI samples, more varied human text, drift monitoring and a retraining trigger.
+- The tweet evaluation set is small (38 rows), so small F1 differences are within noise.
+- Confidence is not correctness: the model can still be confidently wrong, e.g. it labelled a ChatGPT-style sentence as human at 0.75, and it leans towards "human" on short texts.
+- Human tweets come from one source (airline tweets), and AI text is mostly abstracts plus 62 generated tweets.
+- Next steps: more varied AI and human social-media text, and a labelled feedback loop so monitoring can track accuracy, not only confidence.
