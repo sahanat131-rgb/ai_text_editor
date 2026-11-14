@@ -7,3 +7,5 @@ run_log*.txt
 data/
 .pytest_cache/
 predictions_log.csv
+model_v*.pkl
+vectorizer_v*.pkl
