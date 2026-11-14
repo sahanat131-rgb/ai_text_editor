@@ -6,3 +6,4 @@ mlflow.db
 run_log*.txt
 data/
 .pytest_cache/
+predictions_log.csv
